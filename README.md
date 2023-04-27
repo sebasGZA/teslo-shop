@@ -13,4 +13,9 @@
 
 5. Set database with ```docker-compose up -d```
 
-6. Run dev: ```npm run start:dev```
+6. Execute seeds
+```
+http://localhost:3000/api/seeds
+```
+
+7. Run dev: ```npm run start:dev```
