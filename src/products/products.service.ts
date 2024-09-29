@@ -9,7 +9,6 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { STATUS_CODES } from 'http';
 
 @Injectable()
 export class ProductsService {
