@@ -4,6 +4,12 @@
 
 # Teslo API
 
+1. Clone proyect
+2. ```npm i```
+3. Clone file ```.env.template``` and rename as ```.env```
+4. Change the env variables values
+5. Dockerize the database
+
 ```
 docker compose up -d
 ```
