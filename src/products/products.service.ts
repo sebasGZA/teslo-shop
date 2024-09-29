@@ -113,6 +113,16 @@ export class ProductsService {
     await this.productRepository.remove(product);
   }
 
+  async deleteAllProducts() {
+    const query = this.productRepository.createQueryBuilder('product');
+
+    try {
+      return query.delete().where({}).execute();
+    } catch (error: any) {
+      this.#handleDbExceptions(error);
+    }
+  }
+
   async findOnePlain(term: string) {
     const { images = [], ...product } = await this.findOne(term);
     return {
