@@ -13,6 +13,7 @@ import { Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationDto } from 'src/shared/dtos/pagination.dto';
+import { ProductImage } from './entities';
 
 @Injectable()
 export class ProductsService {
@@ -20,13 +21,20 @@ export class ProductsService {
   constructor(
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
+    @InjectRepository(ProductImage)
+    private readonly productImageRepository: Repository<ProductImage>,
   ) {
     this.#logger = new Logger(ProductsService.name);
   }
 
-  async create(createProductDto: CreateProductDto) {
+  async create({ images = [], ...createDto }: CreateProductDto) {
     try {
-      const product = this.productRepository.create(createProductDto);
+      const product = this.productRepository.create({
+        ...createDto,
+        images: images.map((image) =>
+          this.productImageRepository.create({ url: image }),
+        ),
+      });
       const productCreated = await this.productRepository.save(product);
       return productCreated;
     } catch (error: any) {
@@ -59,6 +67,7 @@ export class ProductsService {
     const productDb = await this.productRepository.preload({
       id,
       ...updateProductDto,
+      images: [],
     });
     if (!productDb)
       throw new NotFoundException(`Product with id: ${id} not found`);
