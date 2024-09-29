@@ -5,6 +5,8 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
+import { validate as IsUUID } from 'uuid';
+
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Repository } from 'typeorm';
@@ -36,9 +38,12 @@ export class ProductsService {
     return this.productRepository.find({ take: limit, skip: offset });
   }
 
-  async findOne(id: string) {
-    const product = await this.productRepository.findOneBy({ id });
-    if (!product) throw new NotFoundException('Product not found');
+  async findOne(term: string) {
+    let product: Product;
+    if (IsUUID(term))
+      product = await this.productRepository.findOneBy({ id: term });
+    else product = await this.productRepository.findOneBy({ slug: term });
+    if (!product) throw new NotFoundException(`Product with ${term} not found`);
     return product;
   }
 
