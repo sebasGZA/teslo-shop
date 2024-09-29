@@ -5,13 +5,13 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { validate as IsUUID } from 'uuid';
+import { DataSource, Repository } from 'typeorm';
 
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
-import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationDto } from 'src/shared/dtos/pagination.dto';
 import { ProductImage } from './entities';
 
@@ -23,6 +23,7 @@ export class ProductsService {
     private readonly productRepository: Repository<Product>,
     @InjectRepository(ProductImage)
     private readonly productImageRepository: Repository<ProductImage>,
+    private readonly dataSource: DataSource,
   ) {
     this.#logger = new Logger(ProductsService.name);
   }
@@ -75,19 +76,34 @@ export class ProductsService {
     return product;
   }
 
-  async update(id: string, updateProductDto: UpdateProductDto) {
+  async update(id: string, { images, ...updateDto }: UpdateProductDto) {
     const productDb = await this.productRepository.preload({
       id,
-      ...updateProductDto,
-      images: [],
+      ...updateDto,
     });
     if (!productDb)
       throw new NotFoundException(`Product with id: ${id} not found`);
 
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
     try {
-      const productUpdated = await this.productRepository.save(productDb);
-      return productUpdated;
+      if (images) {
+        await queryRunner.manager.delete(ProductImage, { product: { id } });
+        productDb.images = images.map((image) =>
+          this.productImageRepository.create({ url: image }),
+        );
+      }
+      await queryRunner.manager.save(productDb);
+
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+
+      return this.findOnePlain(productDb.id);
     } catch (error: any) {
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
       this.#handleDbExceptions(error);
     }
   }
