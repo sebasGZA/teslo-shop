@@ -61,3 +61,4 @@ postgres/
 
 #public
 public/products/*
+static/products/*
