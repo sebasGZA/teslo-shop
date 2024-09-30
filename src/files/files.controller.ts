@@ -23,7 +23,7 @@ export class FilesController {
     private readonly configService: ConfigService,
   ) {}
 
-  @Get('product/:imageName')
+  @Get('products/:imageName')
   findProductImage(
     @Res() response: Response,
     @Param('imageName') imageName: string,
@@ -32,7 +32,7 @@ export class FilesController {
     response.sendFile(path);
   }
 
-  @Post('product')
+  @Post('products')
   @UseInterceptors(
     FileInterceptor('file', {
       fileFilter,
