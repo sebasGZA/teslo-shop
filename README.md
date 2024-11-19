@@ -12,13 +12,12 @@
 ```
 docker compose up -d
 ```
-
-6. Execute seeds
-```
-localhost:3000/api/seeds
-```
-
-7. Start proyect
+6. Start proyect
 ```
 npm run start:dev
+```
+
+7. Execute seeds
+```
+localhost:3000/api/seeds
 ```
