@@ -8,7 +8,7 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class CreateUserDto {
+export class LoginUserDto {
   @IsString()
   @IsEmail()
   @IsNotEmpty()
@@ -28,11 +28,4 @@ export class CreateUserDto {
     example: 'any123',
   })
   password: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({
-    example: 'any',
-  })
-  fullName: string;
 }
