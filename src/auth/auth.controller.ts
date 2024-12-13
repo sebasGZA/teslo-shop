@@ -3,6 +3,9 @@ import { AuthService } from './auth.service';
 import { CreateUserDto, LoginUserDto } from './dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
+import { GetUser, RawHeaders } from './decorators';
+import { User } from './entities/user.entity';
+import { IncomingHttpHeaders } from 'http';
 
 @ApiBearerAuth('token')
 @Controller('auth')
@@ -21,13 +24,15 @@ export class AuthController {
 
   @Get('private')
   @UseGuards(AuthGuard())
-  testingPrivateRoute() {
+  testingPrivateRoute(
+    @GetUser() user: User,
+    @RawHeaders() headers: IncomingHttpHeaders,
+  ) {
     return {
       ok: true,
       message: 'private route',
-      user: {
-        name: 'string',
-      },
+      user,
+      headers,
     };
   }
 }
