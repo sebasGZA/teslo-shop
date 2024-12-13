@@ -3,6 +3,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 export const swaggerConfiguration = (app: INestApplication) => {
   const config = new DocumentBuilder()
+    .addBearerAuth()
     .setTitle('Teslo shop')
     .setVersion('1.0')
     .build();
