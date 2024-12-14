@@ -1,3 +1,4 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsArray,
   IsIn,
@@ -11,24 +12,39 @@ import {
 export class CreateProductDto {
   @IsString()
   @MinLength(1)
+  @ApiProperty({
+    example: 'onion',
+  })
   title: string;
 
   @IsNumber()
   @IsPositive()
   @IsOptional()
+  @ApiPropertyOptional({
+    example: 1500,
+  })
   price?: number;
 
   @IsString()
   @IsOptional()
+  @ApiPropertyOptional({
+    example: 'clothes',
+  })
   description?: string;
 
   @IsString()
   @IsOptional()
+  @ApiPropertyOptional({
+    example: 'shirt',
+  })
   slug?: string;
 
   @IsNumber()
   @IsPositive()
   @IsOptional()
+  @ApiPropertyOptional({
+    example: 15,
+  })
   stock?: number;
 
   @IsString({
@@ -38,6 +54,9 @@ export class CreateProductDto {
   sizes: string[];
 
   @IsIn(['men', 'women', 'kid', 'unisex'])
+  @ApiPropertyOptional({
+    example: ['men'],
+  })
   gender: string;
 
   @IsString({
@@ -45,6 +64,9 @@ export class CreateProductDto {
   })
   @IsArray()
   @IsOptional()
+  @ApiPropertyOptional({
+    example: ['clothes'],
+  })
   tags?: string[];
 
   @IsString({
@@ -52,5 +74,8 @@ export class CreateProductDto {
   })
   @IsArray()
   @IsOptional()
+  @ApiPropertyOptional({
+    example: ['yourimage.jpg'],
+  })
   images?: string[];
 }
