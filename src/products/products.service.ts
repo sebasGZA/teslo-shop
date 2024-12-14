@@ -12,8 +12,9 @@ import { DataSource, Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
-import { PaginationDto } from 'src/shared/dtos/pagination.dto';
+import { PaginationDto } from '../shared/dtos/pagination.dto';
 import { ProductImage } from './entities';
+import { User } from '../auth/entities/user.entity';
 
 @Injectable()
 export class ProductsService {
@@ -28,13 +29,14 @@ export class ProductsService {
     this.#logger = new Logger(ProductsService.name);
   }
 
-  async create({ images = [], ...createDto }: CreateProductDto) {
+  async create({ images = [], ...createDto }: CreateProductDto, user: User) {
     try {
       const product = this.productRepository.create({
         ...createDto,
         images: images.map((image) =>
           this.productImageRepository.create({ url: image }),
         ),
+        user,
       });
       const productCreated = await this.productRepository.save(product);
       return { ...productCreated, images };
@@ -76,7 +78,11 @@ export class ProductsService {
     return product;
   }
 
-  async update(id: string, { images, ...updateDto }: UpdateProductDto) {
+  async update(
+    id: string,
+    { images, ...updateDto }: UpdateProductDto,
+    user: User,
+  ) {
     const productDb = await this.productRepository.preload({
       id,
       ...updateDto,
@@ -95,7 +101,7 @@ export class ProductsService {
           this.productImageRepository.create({ url: image }),
         );
       }
-      await queryRunner.manager.save(productDb);
+      await queryRunner.manager.save({ ...productDb, user });
 
       await queryRunner.commitTransaction();
       await queryRunner.release();
