@@ -11,11 +11,14 @@ import {
 import { diskStorage } from 'multer';
 import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ConfigService } from '@nestjs/config';
 
 import { FilesService } from './files.service';
 import { fileFilter, fileNamer } from './helpers';
-import { ConfigService } from '@nestjs/config';
 
+@ApiTags('Files')
+@ApiBearerAuth()
 @Controller('files')
 export class FilesController {
   constructor(

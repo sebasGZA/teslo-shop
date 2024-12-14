@@ -10,7 +10,7 @@ import {
   Query,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { Auth, GetUser } from '../auth/decorators';
 import { ProductsService } from './products.service';
@@ -22,6 +22,8 @@ import { PaginationDto } from '../shared/dtos/pagination.dto';
 import { ValidRoles } from '../auth/enums/valid-roles.enum';
 import { Product } from './entities';
 
+@ApiTags('Products')
+@ApiBearerAuth()
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}

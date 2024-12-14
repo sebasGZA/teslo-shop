@@ -10,22 +10,23 @@ import {
 import { ProductImage } from './product-image.entity';
 import { User } from '../../auth/entities/user.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { ProductEnum } from '../enums/product.enum';
 
 @Entity({
   name: 'products',
 })
 export class Product {
   @ApiProperty({
-    example: '2021a3a6-21c7-4010-8744-4c3c623fde61',
-    description: 'Product ID',
+    example: ProductEnum.ID_EXAMPLE,
+    description: ProductEnum.ID_DESCRIPTION,
     uniqueItems: true,
   })
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @ApiProperty({
-    example: 'Men’s Chill Crew Neck Sweatshirt',
-    description: 'Product title',
+    example: ProductEnum.TITLE_EXAMPLE,
+    description: ProductEnum.TITLE_DESCRIPTION,
     uniqueItems: true,
   })
   @Column('text', {
@@ -34,16 +35,16 @@ export class Product {
   title: string;
 
   @ApiProperty({
-    example: 0,
-    description: 'Product price',
+    example: +ProductEnum.PRICE_EXAMPLE,
+    description: ProductEnum.PRICE_DESCRIPTION,
   })
   @Column('float', { default: 0 })
   price: number;
 
   @ApiProperty({
     default: null,
-    description: 'Product description',
-    example: 'Introducing the Tesla Chill Collection',
+    description: ProductEnum.DESCRIPTION,
+    example: ProductEnum.DESCRIPTION_EXAMPLE,
   })
   @Column({
     type: 'text',
@@ -53,15 +54,15 @@ export class Product {
 
   @ApiProperty({
     uniqueItems: true,
-    description: 'Product slug',
-    example: 'mens_chill_crew_neck_sweatshirt',
+    description: ProductEnum.SLUG_DESCRIPTION,
+    example: ProductEnum.SLUG_EXAMPLE,
   })
   @Column('text', { unique: true })
   slug: string;
 
   @ApiProperty({
-    description: 'Product stock',
-    example: 0,
+    description: ProductEnum.STOCK_DESCRIPTION,
+    example: +ProductEnum.STOCK_EXAMPLE,
   })
   @Column('int', {
     default: 0,
@@ -70,7 +71,7 @@ export class Product {
 
   @ApiProperty({
     example: ['M', 'XL', 'XXL'],
-    description: 'Product sizes',
+    description: ProductEnum.SIZES_DESCRIPTION,
     isArray: true,
   })
   @Column('text', {
@@ -79,8 +80,8 @@ export class Product {
   sizes: string[];
 
   @ApiProperty({
-    example: 'mem',
-    description: 'Product gender',
+    example: ProductEnum.GENDER_EXAMPLE,
+    description: ProductEnum.GENDER_DESCRIPTION,
     isArray: true,
   })
   @Column('text')
@@ -88,7 +89,7 @@ export class Product {
 
   @ApiProperty({
     example: ['mem'],
-    description: 'Product tags',
+    description: ProductEnum.TAGS_DESCRIPTION,
     isArray: true,
   })
   @Column('text', {

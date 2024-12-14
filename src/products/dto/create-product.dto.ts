@@ -8,12 +8,14 @@ import {
   IsString,
   MinLength,
 } from 'class-validator';
+import { ProductEnum } from '../enums/product.enum';
 
 export class CreateProductDto {
   @IsString()
   @MinLength(1)
   @ApiProperty({
-    example: 'onion',
+    example: ProductEnum.TITLE_EXAMPLE,
+    description: ProductEnum.TITLE_DESCRIPTION,
   })
   title: string;
 
@@ -21,21 +23,24 @@ export class CreateProductDto {
   @IsPositive()
   @IsOptional()
   @ApiPropertyOptional({
-    example: 1500,
+    example: +ProductEnum.PRICE_EXAMPLE,
+    description: ProductEnum.PRICE_DESCRIPTION,
   })
   price?: number;
 
   @IsString()
   @IsOptional()
   @ApiPropertyOptional({
-    example: 'clothes',
+    example: ProductEnum.DESCRIPTION_EXAMPLE,
+    description: ProductEnum.DESCRIPTION,
   })
   description?: string;
 
   @IsString()
   @IsOptional()
   @ApiPropertyOptional({
-    example: 'shirt',
+    example: ProductEnum.SLUG_EXAMPLE,
+    description: ProductEnum.SLUG_DESCRIPTION,
   })
   slug?: string;
 
@@ -43,7 +48,8 @@ export class CreateProductDto {
   @IsPositive()
   @IsOptional()
   @ApiPropertyOptional({
-    example: 15,
+    example: +ProductEnum.STOCK_EXAMPLE,
+    description: ProductEnum.STOCK_DESCRIPTION,
   })
   stock?: number;
 
@@ -51,11 +57,16 @@ export class CreateProductDto {
     each: true,
   })
   @IsArray()
+  @ApiProperty({
+    example: ['M'],
+    description: ProductEnum.SIZES_DESCRIPTION,
+  })
   sizes: string[];
 
   @IsIn(['men', 'women', 'kid', 'unisex'])
   @ApiPropertyOptional({
     example: ['men'],
+    description: ProductEnum.GENDER_DESCRIPTION,
   })
   gender: string;
 
@@ -66,6 +77,7 @@ export class CreateProductDto {
   @IsOptional()
   @ApiPropertyOptional({
     example: ['clothes'],
+    description: ProductEnum.TAGS_DESCRIPTION,
   })
   tags?: string[];
 
@@ -76,6 +88,8 @@ export class CreateProductDto {
   @IsOptional()
   @ApiPropertyOptional({
     example: ['yourimage.jpg'],
+    description: ProductEnum.IMAGES_DESCRIPTION,
+    isArray: true,
   })
   images?: string[];
 }

@@ -7,6 +7,8 @@ import {
 } from 'typeorm';
 
 import { Product } from '../../products/entities';
+import { ApiProperty } from '@nestjs/swagger';
+import { UserEnum } from '../enums';
 
 @Entity('users')
 export class User {
@@ -16,19 +18,34 @@ export class User {
   @Column('text', {
     unique: true,
   })
+  @ApiProperty({
+    example: UserEnum.EMAIL_EXAMPLE,
+    description: UserEnum.EMAIL_DESCRIPTION,
+    uniqueItems: true,
+  })
   email: string;
 
   @Column('text')
+  @ApiProperty({
+    example: UserEnum.PASSWORD_EXAMPLE,
+    description: UserEnum.PASSWORD_DESCRIPTION,
+  })
   password: string;
 
   @Column('text')
+  @ApiProperty({
+    example: UserEnum.FULL_NAME_EXAMPLE,
+    description: UserEnum.FULL_NAME_DESCRIPTION,
+  })
   fullName: string;
 
   @Column('bool', {
     default: true,
   })
+  @ApiProperty()
   isActive: boolean;
 
+  @ApiProperty()
   @Column('text', {
     array: true,
     default: ['user'],

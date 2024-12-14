@@ -7,13 +7,15 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { UserEnum } from '../enums/user.enum';
 
 export class LoginUserDto {
   @IsString()
   @IsEmail()
   @IsNotEmpty()
   @ApiProperty({
-    example: 'any@any.com',
+    example: UserEnum.EMAIL_EXAMPLE,
+    description: UserEnum.EMAIL_DESCRIPTION,
   })
   email: string;
 
@@ -21,11 +23,11 @@ export class LoginUserDto {
   @MinLength(6)
   @MaxLength(50)
   @Matches(/(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-    message:
-      'The password must have a Uppercase, lowercase letter and a number',
+    message: UserEnum.MATCH_PASSWORD_MESSAGE,
   })
   @ApiProperty({
-    example: 'any123',
+    example: UserEnum.PASSWORD_EXAMPLE,
+    description: UserEnum.PASSWORD_DESCRIPTION,
   })
   password: string;
 }
